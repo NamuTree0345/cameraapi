@@ -12,6 +12,7 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
+    implementation("com.google.code.gson:gson:2.8.7")
     implementation(project(":API"))
 
     implementation(project(":1_17_R1"))

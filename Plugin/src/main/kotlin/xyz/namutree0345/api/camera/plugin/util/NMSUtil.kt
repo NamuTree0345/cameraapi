@@ -5,7 +5,8 @@ import java.lang.IllegalStateException
 
 fun getMinecraftVersion() : String {
     try {
-        return Bukkit.getServer().javaClass.`package`.name.split("\\.")[3]
+        val v = Bukkit.getServer().javaClass.`package`.name
+        return v.substring(v.lastIndexOf('.') + 1)
     } catch (exception: ArrayIndexOutOfBoundsException) {
         throw IllegalStateException("Can't find minecraft version!")
     }

@@ -1,3 +1,5 @@
 name: CameraAPITest
 version: 1.0.0
 main: xyz.namutree0345.api.camera.Test
+depend:
+  - CameraAPI

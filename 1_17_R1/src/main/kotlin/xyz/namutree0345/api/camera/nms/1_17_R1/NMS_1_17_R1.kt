@@ -1,8 +1,11 @@
 package xyz.namutree0345.api.camera.nms.`1_17_R1`
 
+import com.google.gson.Gson
+import com.google.gson.JsonParser
 import com.mojang.authlib.GameProfile
 import com.mojang.authlib.properties.Property
 import com.mojang.util.UUIDTypeAdapter
+import net.minecraft.core.BlockPosition
 import net.minecraft.network.protocol.game.PacketPlayOutEntityDestroy
 import net.minecraft.network.protocol.game.PacketPlayOutEntityTeleport
 import net.minecraft.network.protocol.game.PacketPlayOutNamedEntitySpawn
@@ -44,7 +47,7 @@ class NMS_1_17_R1 : NMS {
         c.setPositionRotation(location.x, location.y, location.z, location.yaw, location.pitch)
         c.setLocation(location.x, location.y, location.z, location.yaw, location.pitch)
         c.isInvisible = false;
-        //c.teleportTo(world, BlockPosition(location.block.x, location.block.y, location.getBlock().z))
+        c.teleportTo(world, BlockPosition(location.block.x, location.block.y, location.getBlock().z))
         c.customName = net.minecraft.network.chat.ChatComponentText(name)
 
         return c
@@ -67,9 +70,12 @@ class NMS_1_17_R1 : NMS {
             connection.requestMethod = "GET"
             connection.connect()
             if (connection.responseCode == HttpsURLConnection.HTTP_OK) {
-                val reply = BufferedReader(InputStreamReader(connection.inputStream)).lines().collect(Collectors.joining())
-                val skin = reply.split("\"value\":\"").toTypedArray()[1].split("\"").toTypedArray()[0]
-                val signature = reply.split("\"signature\":\"").toTypedArray()[1].split("\"").toTypedArray()[0]
+                val reply = BufferedReader(InputStreamReader(connection.inputStream)).lines().collect(Collectors.joining()).replace(" ", "")
+                println(reply)
+                val jsonobj = JsonParser().parse(reply)
+                val textureelem = jsonobj.asJsonObject.get("properties").asJsonArray.get(0).asJsonObject
+                val skin = textureelem.get("value").asString
+                val signature = textureelem.get("signature").asString
                 skinCache[uuid] = Skin(skin, signature)
                 profile.properties.put("textures", Property("textures", skin, signature))
             } else {
@@ -86,7 +92,7 @@ class NMS_1_17_R1 : NMS {
         c.setPositionRotation(location.x, location.y, location.z, location.yaw, location.pitch)
         c.setLocation(location.x, location.y, location.z, location.yaw, location.pitch)
         c.isInvisible = false;
-        //c.teleportTo(world, BlockPosition(location.block.x, location.block.y, location.getBlock().z))
+        c.teleportTo(world, BlockPosition(location.block.x, location.block.y, location.getBlock().z))
         c.customName = net.minecraft.network.chat.ChatComponentText(name)
 
         return c
