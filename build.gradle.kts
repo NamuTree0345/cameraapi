@@ -1,8 +1,5 @@
-import kr.entree.spigradle.kotlin.paper
-
 plugins {
-    kotlin("jvm") version "1.5.10"
-    id("kr.entree.spigradle") version "2.2.3"
+    kotlin("jvm") version "1.5.20"
 }
 
 group = "org.example"
@@ -18,17 +15,21 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
     compileOnly("io.papermc.paper:paper-api:1.17-R0.1-SNAPSHOT")
-    compileOnly("com.github.spigradle.spigradle:kr.entree.spigradle.base.gradle.plugin:v2.2.3")
     //compileOnly(paper("1.16.5"))
     //compileOnly("com.comphenix.protocol:ProtocolLib:4.6.0")
 }
 
-spigot {
-    authors = listOf("NamuTree0345")
-    apiVersion = project.property("apiVersion").toString()
-    //depends = listOf("ProtocolLib")
-    commands {
-        //create("hello")
+subprojects {
+    apply {
+        plugin("org.jetbrains.kotlin.jvm")
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        implementation(kotlin("stdlib-jdk8"))
     }
 }
 
